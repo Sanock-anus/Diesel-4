@@ -28,18 +28,22 @@ nav a {
 nav a:hover {
     text-decoration: underline;
 }
-.user-section a {
+
+.user-section button {
     color: #e0e0e0;
-    text-decoration: none;
-    margin: 0 10px;
     background-color: #424242;
     padding: 5px 10px;
+    border: none;
     border-radius: 5px;
-    
+    margin-left: 10px;
+    cursor: pointer;
 }
 
-.user-section a:hover {
+.user-section button:hover {
     background-color: #555;
+}
+.user-section button:focus{
+    outline: none;
 }
 
 main {
@@ -70,7 +74,9 @@ main {
     cursor: pointer;
     margin-top: 10px;
 }
-
+.filter-button:focus{
+    outline: none;
+}
 .filter-button:hover {
     background-color: #841c61;
 }
@@ -128,6 +134,18 @@ main {
 .buy-button:hover {
     background-color: #5a6091;
 }
+.download-button{
+    background-color: #0077b6;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+.download-button:hover {
+    background-color: #00a0e2;
+}
 
 footer {
     text-align: center;
@@ -136,4 +154,61 @@ footer {
     position: fixed;
     bottom: 0;
     width: 100%;
+}
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 30%;
+    position: relative;
+    border-radius: 5px;
+    color: black;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+.modal-content input{
+    margin-bottom: 10px;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid black;
+    width: calc(100% - 20px);
+}
+.modal-content button{
+    background-color: #3c427c;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 100%;
+}
+.modal-content button:hover {
+    background-color: #5a6091;
 }
