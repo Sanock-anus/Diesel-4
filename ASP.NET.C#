@@ -1,0 +1,135 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+
+namespace DieselBackend
+{
+    public class Startup
+    {
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddDbContext<DieselContext>(options =>
+                options.UseSqlite("Data Source=diesel.db")); // SQLite DB
+            services.AddControllers();
+        }
+
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+             app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+             EnsureDatabaseCreated(app);
+        }
+         private static void EnsureDatabaseCreated(IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices.CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetService<DieselContext>();
+                context.Database.EnsureCreated();
+            }
+        }
+    }
+    public class DieselContext : DbContext
+    {
+        public DbSet<User> Users { get; set; }
+        public DbSet<Game> Games { get; set; }
+        public DieselContext(DbContextOptions<DieselContext> options)
+        : base(options)
+        {
+        }
+    }
+     public class User
+    {
+        public int Id { get; set; }
+        public string Username { get; set; }
+        public string PasswordHash { get; set; }
+        
+    }
+
+    public class Game
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public decimal Price { get; set; }
+        public string Image { get; set; }
+        public string Genre { get; set; }
+    }
+    [ApiController]
+    [Route("[controller]")]
+    public class AuthController : ControllerBase
+    {
+        private readonly DieselContext _context;
+
+        public AuthController(DieselContext context)
+        {
+            _context = context;
+        }
+         [HttpPost("register")]
+         public IActionResult Register([FromBody] RegistrationModel model)
+        {
+            if (_context.Users.Any(u => u.Username == model.Username))
+            {
+                return BadRequest("User with this username already exists.");
+            }
+             var newUser = new User
+            {
+                Username = model.Username,
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.Password)
+            };
+            _context.Users.Add(newUser);
+             _context.SaveChanges();
+             return Ok(new { message = "User registered successfully" });
+        }
+        [HttpPost("login")]
+          public IActionResult Login([FromBody] LoginModel model)
+        {
+            var user = _context.Users.FirstOrDefault(u => u.Username == model.Username);
+            if (user == null || !BCrypt.Net.BCrypt.Verify(model.Password, user.PasswordHash))
+            {
+                return Unauthorized("Invalid username or password.");
+            }
+
+            // Return user ID or create a JWT token for future authentication
+            return Ok(new { message = "Login successful", userId = user.Id });
+        }
+    }
+    [ApiController]
+    [Route("[controller]")]
+    public class GamesController : ControllerBase
+    {
+         private readonly DieselContext _context;
+
+        public GamesController(DieselContext context)
+        {
+            _context = context;
+        }
+        [HttpGet]
+           public ActionResult<IEnumerable<Game>> GetGames()
+           {
+               return _context.Games.ToList();
+           }
+    }
+    public class LoginModel
+    {
+        public string Username { get; set; }
+        public string Password { get; set; }
+    }
+     public class RegistrationModel
+    {
+        public string Username { get; set; }
+        public string Password { get; set; }
+    }
+}
