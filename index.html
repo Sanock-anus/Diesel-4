@@ -3,52 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Мрачный Магазин Игр</title>
+    <title>Diesel</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
-        <div class="logo">Мрачный Магазин</div>
+        <div class="logo">Diesel</div>
         <nav>
             <a href="#">Игры</a>
             <a href="#">Сообщество</a>
             <a href="#">Поддержка</a>
         </nav>
         <div class="user-section">
-            <a href="#">Войти</a>
-            <a href="#">Регистрация</a>
+            <button id="loginButton">Войти</button>
+            <button id="registerButton">Регистрация</button>
+            <span id="userName" style="display: none;"></span>
+            <button id="logoutButton" style="display: none;">Выйти</button>
         </div>
     </header>
 
     <main>
         <aside class="filters">
             <h2>Фильтры</h2>
-            <label><input type="checkbox"> Экшен</label>
-            <label><input type="checkbox"> RPG</label>
-            <label><input type="checkbox"> Стратегии</label>
-            <label><input type="checkbox"> Инди</label>
-            <button class="filter-button">Применить</button>
+            <label><input type="checkbox" class="filter-checkbox" data-genre="action"> Экшен</label>
+            <label><input type="checkbox" class="filter-checkbox" data-genre="rpg"> RPG</label>
+            <label><input type="checkbox" class="filter-checkbox" data-genre="strategy"> Стратегии</label>
+            <label><input type="checkbox" class="filter-checkbox" data-genre="indie"> Инди</label>
+            <button class="filter-button" id="filterButton">Применить</button>
         </aside>
         <section class="game-list">
-            <div class="game-card">
-                <img src="" alt="Игра 1">
-                <h3>Название игры 1</h3>
-                <p>Краткое описание игры 1...</p>
-                <div class="price">$19.99</div>
-                <button class="buy-button">Купить</button>
-            </div>
-            <div class="game-card">
-                <img src="" alt="Игра 2">
-                <h3>Название игры 2</h3>
-                <p>Краткое описание игры 2...</p>
-                <div class="price">$29.99</div>
-                <button class="buy-button">Купить</button>
-            </div>
-            <!-- Добавьте больше игровых карт -->
+            <!-- Игры будут добавляться здесь -->
         </section>
+         <div id="loginModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Вход</h2>
+                <input type="text" id="loginUsername" placeholder="Имя пользователя">
+                <input type="password" id="loginPassword" placeholder="Пароль">
+                <button id="loginSubmit">Войти</button>
+                
+            </div>
+        </div>
+
+        <div id="registerModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Регистрация</h2>
+                <input type="text" id="registerUsername" placeholder="Имя пользователя">
+                <input type="password" id="registerPassword" placeholder="Пароль">
+                <button id="registerSubmit">Зарегистрироваться</button>
+             
+            </div>
+        </div>
     </main>
     <footer>
-        <p>&copy; 2024 Мрачный Магазин Игр</p>
+        <p>&copy; 2024 Diesel</p>
     </footer>
     <script src="script.js"></script>
 </body>
